@@ -11,7 +11,7 @@ function Sidebar() {
 
   const getAllThreads = async()=>{
     try{
-      const response= await fetch("http://localhost:8080/api/threads")
+      const response= await fetch("https://major-project-2-z7bc.onrender.com/api/threads")
       const data = await response.json();
 
       const filteredData= data.map(thread=>({threadId: thread.threadId, title: thread.title}));
@@ -39,7 +39,7 @@ function Sidebar() {
 
   const getData =async (newTID)=>{
     try {
-     const res = await fetch(`http://localhost:8080/api/thread/${newTID}`);
+     const res = await fetch(`https://major-project-2-z7bc.onrender.com/api/thread/${newTID}`);
      const data= await res.json();
      console.log(data);
 
@@ -55,7 +55,7 @@ function Sidebar() {
 
   const deleteThread= async(threadId)=>{
     try {
-      const res= await fetch(`http://localhost:8080/api/thread/${threadId}`,{method:"DELETE"});
+      const res= await fetch(`https://major-project-2-z7bc.onrender.com/api/thread/${threadId}`,{method:"DELETE"});
       const data= await res.json();
       console.log(data);
 

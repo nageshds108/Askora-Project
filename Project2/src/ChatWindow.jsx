@@ -28,7 +28,7 @@ function ChatWindow () {
     }
 
     try{
-      const res = await fetch( "http://localhost:8080/api/chat",options);
+      const res = await fetch( "https://major-project-2-z7bc.onrender.com/api/chat",options);
       const data = await res.json();
       console.log(data);
       setReply(data.reply);

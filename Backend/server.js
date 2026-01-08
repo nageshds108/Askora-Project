@@ -5,6 +5,7 @@ import cors from 'cors';
 import chatRoutes from './routes/chat.js';
 
 
+
 const app= express();
 
 app.use(cors());
@@ -18,6 +19,11 @@ const connectDB = async () => {
     }catch (error) {
         console.error("Error connecting to MongoDB:", error);
     }};
+
+
+app.get("/", (req, res) => {
+  res.send("Backend is running successfully 🚀");
+});
 
 
 app.listen(8080, ()=>{
