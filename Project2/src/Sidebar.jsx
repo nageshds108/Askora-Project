@@ -74,7 +74,7 @@ function Sidebar() {
   return (
     <section className="sidebar">
     <button onClick={()=>{createNewchat()}}>
-      <img className="logo" src="src/assets/blacklogo.png" alt="img" />
+      <img className="logo" src="https://res.cloudinary.com/dz6njjqhx/image/upload/v1768293218/blacklogo_jf93cv.png" alt="img" />
       <span><i className="fa-solid fa-pen-to-square"></i></span>
     </button>
 
