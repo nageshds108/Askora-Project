@@ -8,7 +8,7 @@ A modern AI-powered chat application with conversation history, built with React
 Askora is a full-stack AI chat application that allows users to have intelligent conversations with an AI assistant powered by Meta's Llama 3.1 model via OpenRouter.  
 The application features persistent conversation threads, real-time message streaming, markdown rendering with code syntax highlighting, and a responsive user interface.
 
-🔗 **Live Demo:** https://major-project-2-z7bc.onrender.com/
+🔗 **Live Demo:** https://major-project-2-1-oui6.onrender.com/
 
 ---
 
