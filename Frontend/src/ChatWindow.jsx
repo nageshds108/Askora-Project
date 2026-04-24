@@ -1,25 +1,29 @@
 import "./ChatWindow.css";
-import Chat from "./chat";
+import Chat from "./chat.jsx";
 import {MyContext} from "./myContext.jsx";
 import { useContext,useState,useEffect } from "react";
 import { CircleLoader } from 'react-spinners';
+import { API_BASE_URL } from "./config.js";
 
 
 
 function ChatWindow () {
-  const{prompt,setPrompt,reply,setReply,currTID,setChat,prevChats,setTID,setNchat,shouldAnimate,setShouldAnimate}=useContext(MyContext)
+  const{prompt,setPrompt,reply,setReply,currTID,setChat,setNchat,setShouldAnimate,authToken,logout}=useContext(MyContext)
   let[loading, setLoading]=useState(false);
   const[isOpen, setIsOpen]= useState(false);
 
 
   const getRES = async ()=>{
+    if (!prompt.trim() || !authToken) return;
+
     setLoading(true);
     setNchat(false);
     console.log(currTID,prompt)
     let options = {
       method : "POST",
       headers : {
-        "Content-Type":"application/json"
+        "Content-Type":"application/json",
+        "Authorization": `Bearer ${authToken}`
       },
       body: JSON.stringify({
         message: prompt, 
@@ -28,8 +32,11 @@ function ChatWindow () {
     }
 
     try{
-      const res = await fetch( "https://major-project-2-z7bc.onrender.com/api/chat",options);
+      const res = await fetch(`${API_BASE_URL}/api/chat`,options);
       const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Unable to send message");
+      }
       console.log(data);
       setReply(data.reply);
     }catch(err){
@@ -39,7 +46,7 @@ function ChatWindow () {
 
   };
 
- useEffect(() => {
+useEffect(() => {
   if (!reply) return;
 
   setChat(prevchat => [
@@ -52,7 +59,7 @@ function ChatWindow () {
 
   setPrompt("");
   setReply("");
-}, [reply]);
+}, [reply, prompt, setChat, setPrompt, setReply, setShouldAnimate]);
 
 
 const handleProfileCLick = () => {
@@ -72,9 +79,9 @@ const handleProfileCLick = () => {
       {
         isOpen && <div className="dropdown">
 
-          <div className="dropdownitem"><i class="fa-solid fa-gear"></i> Settings</div>
-          <div className="dropdownitem"><i class="fa-solid fa-right-from-bracket"></i> Logout</div>
-          <div className="dropdownitem"><i class="fa-solid fa-life-ring"></i> Help</div>
+          <div className="dropdownitem"><i className="fa-solid fa-gear"></i> Settings</div>
+          <div className="dropdownitem" onClick={logout}><i className="fa-solid fa-right-from-bracket"></i> Logout</div>
+          <div className="dropdownitem"><i className="fa-solid fa-life-ring"></i> Help</div>
 
         </div>
       }

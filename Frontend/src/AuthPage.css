@@ -1,0 +1,118 @@
+.authRoot {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(51, 156, 255, 0.24), transparent 32%),
+    radial-gradient(circle at 85% 85%, rgba(22, 163, 74, 0.2), transparent 32%),
+    #212121;
+}
+
+.authCard {
+  width: min(460px, 100%);
+  background: #171717;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
+.authHeader h1 {
+  margin: 8px 0 6px;
+  font-size: 1.8rem;
+}
+
+.authBadge {
+  display: inline-block;
+  margin: 0;
+  font-size: 0.78rem;
+  color: #9fcfff;
+  background: rgba(51, 156, 255, 0.12);
+  border: 1px solid rgba(51, 156, 255, 0.4);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+.authSubText {
+  margin: 0;
+  color: #b4b4b4;
+  font-size: 0.92rem;
+}
+
+.authToggle {
+  margin-top: 20px;
+  background: #212121;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+.authToggle button {
+  margin: 0;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  padding: 10px;
+}
+
+.authToggle button.active {
+  background: #339cff;
+  color: #fff;
+}
+
+.authForm {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.authForm label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: #b4b4b4;
+}
+
+.authForm input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.authError {
+  margin: 4px 0 0;
+  color: #fca5a5;
+  font-size: 0.86rem;
+  text-align: left;
+}
+
+.authSubmit {
+  margin-top: 6px;
+  justify-content: center;
+  border: none;
+  background: linear-gradient(100deg, #339cff, #22c55e);
+  color: #fff;
+  font-weight: 600;
+}
+
+.authSubmit:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+@media (max-width: 560px) {
+  .authCard {
+    padding: 22px;
+  }
+
+  .authHeader h1 {
+    font-size: 1.45rem;
+  }
+}

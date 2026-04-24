@@ -40,7 +40,7 @@ function Chat() {
 
         return() => clearInterval(interval);
 
-    }, [prevChats, shouldAnimate])
+    }, [prevChats, shouldAnimate, setShouldAnimate])
     return (
         <>
         {newChat&& <h1>Start a New Chat !</h1>}

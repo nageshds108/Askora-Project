@@ -13,3 +13,12 @@ body{
     background-color: #212121;
     display: flex;
 }
+
+.appLoader {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background-color: #212121;
+    color: #ececec;
+    font-size: 1rem;
+}

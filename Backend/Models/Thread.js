@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
 const MessageSchema = new mongoose.Schema({
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
 
     role:{
         type: String,
@@ -21,8 +26,13 @@ const MessageSchema = new mongoose.Schema({
 const ThreadSchema = new mongoose.Schema({
      threadId: {
         type: String,
+        required: true
+     },
+     owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
         required: true,
-        unique: true
+        index: true
      },
 
      title:{
@@ -43,6 +53,8 @@ const ThreadSchema = new mongoose.Schema({
         }
 
 });
+
+ThreadSchema.index({ owner: 1, threadId: 1 }, { unique: true });
 
 export default mongoose.model('Thread', ThreadSchema);
 

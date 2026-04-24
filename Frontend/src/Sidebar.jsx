@@ -1,18 +1,29 @@
 import "./sidebar.css";
 import {MyContext} from "./myContext.jsx";
-import { useContext,useState,useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { v1 as uuidv1 } from "uuid";
+import { API_BASE_URL } from "./config.js";
 
 
 
 
 function Sidebar() {
-  const {allThreads, setAllThreads, currTIDprompt,setPrompt,reply,setReply,currTID,setTID,prevChats,setChat,newChat,setNchat,shouldAnimate,setShouldAnimate}= useContext(MyContext);
+  const {allThreads, setAllThreads, setPrompt, reply, setReply, currTID, setTID, setChat, setNchat, setShouldAnimate, authToken}= useContext(MyContext);
 
-  const getAllThreads = async()=>{
+  const getAllThreads = useCallback(async()=>{
+    if (!authToken) return;
+
     try{
-      const response= await fetch("https://major-project-2-z7bc.onrender.com/api/threads")
+      const response= await fetch(`${API_BASE_URL}/api/threads`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        }
+      })
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to fetch threads");
+      }
 
       const filteredData= data.map(thread=>({threadId: thread.threadId, title: thread.title}));
       setAllThreads(filteredData);
@@ -21,10 +32,10 @@ function Sidebar() {
       console.log(err);
     };
 
-  }
+  }, [authToken, setAllThreads])
   useEffect(()=>{
     getAllThreads()
-  },[])
+  },[getAllThreads, reply])
 
   const createNewchat=()=>{
 
@@ -39,8 +50,17 @@ function Sidebar() {
 
   const getData =async (newTID)=>{
     try {
-     const res = await fetch(`https://major-project-2-z7bc.onrender.com/api/thread/${newTID}`);
+     const res = await fetch(`${API_BASE_URL}/api/thread/${newTID}`, {
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+     });
      const data= await res.json();
+
+     if (!res.ok) {
+      throw new Error(data.error || "Failed to fetch thread");
+     }
+
      console.log(data);
 
      setTID(newTID); 
@@ -55,8 +75,16 @@ function Sidebar() {
 
   const deleteThread= async(threadId)=>{
     try {
-      const res= await fetch(`https://major-project-2-z7bc.onrender.com/api/thread/${threadId}`,{method:"DELETE"});
+      const res= await fetch(`${API_BASE_URL}/api/thread/${threadId}`,{
+        method:"DELETE",
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        }
+      });
       const data= await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to delete thread");
+      }
       console.log(data);
 
       setAllThreads(prev=> prev.filter(thread=> thread.threadId !== threadId));
@@ -80,9 +108,9 @@ function Sidebar() {
 
     <ul className="history">
       {
-        allThreads?.map((thread,idx)=>(
+        allThreads?.map((thread)=>(
           <li key={thread.threadId} className={currTID===thread.threadId?"highlighted":""}
-          onClick={(e)=>{getData(thread.threadId)}}
+          onClick={()=>{getData(thread.threadId)}}
           >{thread.title} <i className="fa-solid fa-trash" onClick={(e)=>{
             e.stopPropagation();
             deleteThread(thread.threadId)}} ></i></li>

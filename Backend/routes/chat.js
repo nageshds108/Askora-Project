@@ -1,18 +1,25 @@
 import express from "express";
 import Thread from "../Models/Thread.js";
 import APIResponse from "../utils/OpenRouterRES.js";
-import getOpenAIAPIResponse  from "../utils/openAPI.js";
+import authMiddleware from "../middleware/auth.js";
 
 
 
 const router = express.Router();
 
+router.use(authMiddleware);
 
 router.post("/thread", async (req, res) => {
  try{
+    const newThreadId = req.body?.threadId;
+    if (!newThreadId) {
+      return res.status(400).json({ error: "threadId is required" });
+    }
+
     const thread = new Thread({
-        title: "XYZ",
-        threadId: "XYZ"
+        title: "New Chat",
+        threadId: newThreadId,
+        owner: req.user._id
  });
     const response=await thread.save();
     res.send(response);
@@ -24,7 +31,7 @@ router.post("/thread", async (req, res) => {
 
 router.get("/threads", async (req, res) => {
     try {
-        const threads = await Thread.find({}).sort({ updatedAt: -1 });
+        const threads = await Thread.find({ owner: req.user._id }).sort({ updatedAt: -1 });
         res.json(threads);
     } catch (error) {
         console.error("Error fetching Chats:", error);
@@ -35,7 +42,7 @@ router.get("/threads", async (req, res) => {
 router.get("/thread/:threadId", async (req, res) => {
     const { threadId } = req.params;
     try {
-        let thread = await Thread.findOne({ threadId });
+        let thread = await Thread.findOne({ threadId, owner: req.user._id });
         if (!thread) {
             return res.status(404).json({ error: "Thread not found" });
         }
@@ -49,7 +56,7 @@ router.get("/thread/:threadId", async (req, res) => {
 router.delete("/thread/:threadId", async (req, res) => {
     const { threadId } = req.params;
     try {
-        const result = await Thread.findOneAndDelete({ threadId });
+        const result = await Thread.findOneAndDelete({ threadId, owner: req.user._id });
         if (!result) {
             return res.status(404).json({ error: "Thread not found" });
         }
@@ -69,19 +76,20 @@ router.post("/chat", async (req, res) => {
     }
 
     try {
-        let thread = await Thread.findOne({ threadId });
+        let thread = await Thread.findOne({ threadId, owner: req.user._id });
         if (!thread) {
             thread= new Thread({
+                 owner: req.user._id,
                  threadId,
-                  title: message,
-                  messages: [{role: "user",content: message}]
+                 title: message,
+                 messages: [{ owner: req.user._id, role: "user", content: message }]
              });
         }else{
-            thread.messages.push({ role: "user", content: message });
+            thread.messages.push({ owner: req.user._id, role: "user", content: message });
         }
 
         const reply = await APIResponse(message)
-        thread.messages.push({ role: "assistant", content: reply });
+        thread.messages.push({ owner: req.user._id, role: "assistant", content: reply });
         thread.updatedAt = new Date();
 
         await thread.save();
