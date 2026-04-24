@@ -3,7 +3,7 @@ import Chat from "./chat.jsx";
 import {MyContext} from "./myContext.jsx";
 import { useContext,useState,useEffect } from "react";
 import { CircleLoader } from 'react-spinners';
-import { API_BASE_URL } from "./config.js";
+import { apiRequest } from "./apiClient.js";
 
 
 
@@ -32,11 +32,7 @@ function ChatWindow () {
     }
 
     try{
-      const res = await fetch(`${API_BASE_URL}/api/chat`,options);
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Unable to send message");
-      }
+      const data = await apiRequest("/api/chat", options);
       console.log(data);
       setReply(data.reply);
     }catch(err){

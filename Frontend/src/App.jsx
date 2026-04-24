@@ -5,7 +5,7 @@ import ChatWindow from "./ChatWindow.jsx";
 import {MyContext} from "./myContext.jsx";
 import { v4 as uuidv4 } from 'uuid';
 import AuthPage from "./AuthPage.jsx";
-import { API_BASE_URL } from "./config.js";
+import { apiRequest } from "./apiClient.js";
 
 
 
@@ -31,16 +31,11 @@ function App() {
       }
 
       try {
-        const res = await fetch(`${API_BASE_URL}/api/auth/me`, {
+        const data = await apiRequest("/api/auth/me", {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
         });
-
-        const data = await res.json();
-        if (!res.ok) {
-          throw new Error(data.error || "Session expired");
-        }
 
         setUser(data.user);
       } catch {
@@ -69,7 +64,7 @@ function App() {
 
   const logout = async () => {
     try {
-      await fetch(`${API_BASE_URL}/api/auth/logout`, {
+      await apiRequest("/api/auth/logout", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${authToken}`,

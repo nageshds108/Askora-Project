@@ -3,19 +3,16 @@
   display: grid;
   place-items: center;
   padding: 24px;
-  background:
-    radial-gradient(circle at 15% 15%, rgba(51, 156, 255, 0.24), transparent 32%),
-    radial-gradient(circle at 85% 85%, rgba(22, 163, 74, 0.2), transparent 32%),
-    #212121;
+  background: #000;
 }
 
 .authCard {
   width: min(460px, 100%);
   background: #171717;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 18px;
   padding: 30px;
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
 }
 
 .authHeader h1 {
@@ -40,30 +37,6 @@
   font-size: 0.92rem;
 }
 
-.authToggle {
-  margin-top: 20px;
-  background: #212121;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 4px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-}
-
-.authToggle button {
-  margin: 0;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  padding: 10px;
-}
-
-.authToggle button.active {
-  background: #339cff;
-  color: #fff;
-}
-
 .authForm {
   margin-top: 18px;
   display: flex;
@@ -84,6 +57,8 @@
   width: 100%;
   box-sizing: border-box;
   border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: #212121;
+  color: #ececec;
 }
 
 .authError {
@@ -97,7 +72,7 @@
   margin-top: 6px;
   justify-content: center;
   border: none;
-  background: linear-gradient(100deg, #339cff, #22c55e);
+  background: #339cff;
   color: #fff;
   font-weight: 600;
 }
@@ -105,6 +80,32 @@
 .authSubmit:disabled {
   opacity: 0.75;
   cursor: not-allowed;
+}
+
+.authSwitchText {
+  margin: 16px 0 0;
+  color: #b4b4b4;
+  font-size: 0.9rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.authSwitchLink {
+  display: inline;
+  border: none;
+  background: transparent;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.authSwitchLink:hover {
+  color: inherit;
 }
 
 @media (max-width: 560px) {

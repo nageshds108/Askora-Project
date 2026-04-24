@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./AuthPage.css";
-import { API_BASE_URL } from "./config";
+import { apiRequest } from "./apiClient";
 
 function AuthPage({ onAuthSuccess }) {
   const [mode, setMode] = useState("login");
@@ -28,19 +28,13 @@ function AuthPage({ onAuthSuccess }) {
           ? { email: email.trim(), password }
           : { name: name.trim(), email: email.trim(), password };
 
-      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      const data = await apiRequest(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Authentication failed");
-      }
 
       onAuthSuccess(data.token, data.user);
     } catch (submitError) {
@@ -54,36 +48,8 @@ function AuthPage({ onAuthSuccess }) {
     <div className="authRoot">
       <div className="authCard">
         <div className="authHeader">
-          <p className="authBadge">Askora Workspace</p>
           <h1>{mode === "login" ? "Welcome back" : "Create your account"}</h1>
-          <p className="authSubText">
-            {mode === "login"
-              ? "Sign in to continue your personal AI threads."
-              : "Register to create and own your private threads."}
-          </p>
-        </div>
-
-        <div className="authToggle">
-          <button
-            type="button"
-            className={mode === "login" ? "active" : ""}
-            onClick={() => {
-              setMode("login");
-              setError("");
-            }}
-          >
-            Login
-          </button>
-          <button
-            type="button"
-            className={mode === "register" ? "active" : ""}
-            onClick={() => {
-              setMode("register");
-              setError("");
-            }}
-          >
-            Register
-          </button>
+          
         </div>
 
         <form className="authForm" onSubmit={submitForm}>
@@ -129,6 +95,20 @@ function AuthPage({ onAuthSuccess }) {
               : "Create account"}
           </button>
         </form>
+
+        <p className="authSwitchText">
+          {mode === "login" ? "Don't have an account? " : "Already have an account? "}
+          <button
+            type="button"
+            className="authSwitchLink"
+            onClick={() => {
+              setMode(mode === "login" ? "register" : "login");
+              setError("");
+            }}
+          >
+            {mode === "login" ? "Register" : "Login"}
+          </button>
+        </p>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import "./sidebar.css";
 import {MyContext} from "./myContext.jsx";
 import { useCallback, useContext, useEffect } from "react";
 import { v1 as uuidv1 } from "uuid";
-import { API_BASE_URL } from "./config.js";
+import { apiRequest } from "./apiClient.js";
 
 
 
@@ -14,16 +14,11 @@ function Sidebar() {
     if (!authToken) return;
 
     try{
-      const response= await fetch(`${API_BASE_URL}/api/threads`, {
+      const data = await apiRequest("/api/threads", {
         headers: {
           Authorization: `Bearer ${authToken}`
         }
-      })
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch threads");
-      }
+      });
 
       const filteredData= data.map(thread=>({threadId: thread.threadId, title: thread.title}));
       setAllThreads(filteredData);
@@ -50,16 +45,11 @@ function Sidebar() {
 
   const getData =async (newTID)=>{
     try {
-     const res = await fetch(`${API_BASE_URL}/api/thread/${newTID}`, {
+     const data = await apiRequest(`/api/thread/${newTID}`, {
       headers: {
         Authorization: `Bearer ${authToken}`
       }
      });
-     const data= await res.json();
-
-     if (!res.ok) {
-      throw new Error(data.error || "Failed to fetch thread");
-     }
 
      console.log(data);
 
@@ -75,16 +65,12 @@ function Sidebar() {
 
   const deleteThread= async(threadId)=>{
     try {
-      const res= await fetch(`${API_BASE_URL}/api/thread/${threadId}`,{
+      const data = await apiRequest(`/api/thread/${threadId}`, {
         method:"DELETE",
         headers: {
           Authorization: `Bearer ${authToken}`
         }
       });
-      const data= await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to delete thread");
-      }
       console.log(data);
 
       setAllThreads(prev=> prev.filter(thread=> thread.threadId !== threadId));
